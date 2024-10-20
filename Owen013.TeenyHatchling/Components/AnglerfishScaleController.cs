@@ -17,9 +17,9 @@ public class AnglerfishScaleController : ScaleController
 
     protected override void FixedUpdate()
     {
-        if (ModMain.UseOtherCustomScales && TargetScale != ModMain.CustomAnglerfishScale)
+        if (ModMain.Instance.UseOtherCustomScales && TargetScale != ModMain.Instance.CustomAnglerfishScale)
         {
-            SetTargetScale(ModMain.CustomAnglerfishScale);
+            SetTargetScale(ModMain.Instance.CustomAnglerfishScale);
         }
 
         base.FixedUpdate();
@@ -36,9 +36,9 @@ public class AnglerfishScaleController : ScaleController
         // fire on the next update to avoid breaking things
         ModMain.Instance.ModHelper.Events.Unity.FireOnNextUpdate(() =>
         {
-            if (ModMain.UseOtherCustomScales)
+            if (ModMain.Instance.UseOtherCustomScales)
             {
-                scaleController.Scale = ModMain.CustomAnglerfishScale;
+                scaleController.Scale = ModMain.Instance.CustomAnglerfishScale;
             }
             else
             {

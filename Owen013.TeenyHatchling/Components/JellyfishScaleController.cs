@@ -9,9 +9,9 @@ public class JellyfishScaleController : ScaleController
 
     protected override void FixedUpdate()
     {
-        if (ModMain.UseOtherCustomScales && TargetScale != ModMain.CustomJellyfishScale)
+        if (ModMain.Instance.UseOtherCustomScales && TargetScale != ModMain.Instance.CustomJellyfishScale)
         {
-            SetTargetScale(ModMain.CustomJellyfishScale);
+            SetTargetScale(ModMain.Instance.CustomJellyfishScale);
         }
 
         base.FixedUpdate();
@@ -25,9 +25,9 @@ public class JellyfishScaleController : ScaleController
         // fire on the next update to avoid breaking things
         ModMain.Instance.ModHelper.Events.Unity.FireOnNextUpdate(() =>
         {
-            if (ModMain.UseOtherCustomScales)
+            if (ModMain.Instance.UseOtherCustomScales)
             {
-                scaleController.Scale = ModMain.CustomJellyfishScale;
+                scaleController.Scale = ModMain.Instance.CustomJellyfishScale;
             }
             else
             {

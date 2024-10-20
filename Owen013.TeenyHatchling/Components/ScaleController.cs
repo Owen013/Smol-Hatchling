@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SmolHatchling.Components;
 

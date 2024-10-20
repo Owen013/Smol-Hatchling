@@ -11,36 +11,35 @@ public class ModMain : ModBehaviour
 {
     public static ModMain Instance { get; private set; }
 
-    public static IHikersMod HikersModAPI { get; private set; }
+    public IHikersMod HikersModAPI { get; private set; }
 
-    public static bool IsImmersionInstalled { get; private set; }
+    public bool IsImmersionInstalled { get; private set; }
 
-    public static bool UseCustomPlayerScale { get; private set; }
+    public bool UseCustomPlayerScale { get; private set; }
 
-    public static float CustomPlayerScale { get; private set; }
+    public float CustomPlayerScale { get; private set; }
 
-    public static bool UseScaleHotkeys { get; private set; }
+    public bool UseScaleHotkeys { get; private set; }
 
-    public static bool UseScaledPlayerAttributes { get; private set; }
+    public bool UseScaledPlayerAttributes { get; private set; }
 
-    public static bool UseOtherCustomScales { get; private set; }
+    public bool UseOtherCustomScales { get; private set; }
 
-    public static float CustomAnglerfishScale { get; private set; }
+    public float CustomAnglerfishScale { get; private set; }
 
-    public static float CustomJellyfishScale { get; private set; }
+    public float CustomJellyfishScale { get; private set; }
 
-    public static float CustomInhabitantScale { get; private set; }
+    public float CustomInhabitantScale { get; private set; }
 
-    public static float PlayerWideness { get; private set; }
+    public float PlayerWideness { get; private set; }
 
     public delegate void ConfigureEvent();
 
-    public static event ConfigureEvent OnConfigured;
+    public event ConfigureEvent OnConfigured;
 
-    public static void Print(string text, MessageType messageType = MessageType.Message)
+    public void Print(string text, MessageType messageType = MessageType.Message)
     {
-        if (Instance == null || Instance.ModHelper == null) return;
-        Instance.ModHelper.Console.WriteLine(text, messageType);
+        ModHelper.Console.WriteLine(text, messageType);
     }
 
     public override object GetApi()
@@ -120,3 +119,14 @@ public class ModMain : ModBehaviour
         Print($"Smol Hatchling is ready to go!", MessageType.Success);
     }
 }
+
+/*      
+ *      
+ *  ISSUES
+ *  - Footstep particles stay huge when you shrink back down (may have fixed itself??? be on lookout) (nope...nevermind. rare)
+ *  - flashlight distance doesn't scale
+ *  - maybe i should reduce wind volume when big?
+ *  - damage movement speed damping may not scale
+ *  - make probe bigger (or smoller) when launched
+ *  
+ */
