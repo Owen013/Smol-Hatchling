@@ -25,6 +25,14 @@ public class SmolHatchlingAPI
     }
 
     /// <summary>
+    /// Returns true if Smol Hatchling is scaling the player's speed, jump height, and damage thresholds to match their size.
+    /// </summary>
+    public bool UseScaledPlayerAttributes()
+    {
+        return ModMain.UseScaledPlayerAttributes;
+    }
+
+    /// <summary>
     /// Returns the animation speed multiplier.
     /// </summary>
     public float GetPlayerAnimSpeed()
@@ -149,12 +157,5 @@ public class SmolHatchlingAPI
     {
         ModMain.Print("GetAnimSpeed() is deprecated. Use GetPlayerAnimSpeed() instead.", OWML.Common.MessageType.Debug);
         return PlayerScaleController.AnimSpeed;
-    }
-
-    [Obsolete("As of v2.0.0, the player is always using scaled attributes.")]
-    public bool UseScaledPlayerAttributes()
-    {
-        ModMain.Print("As of v2.0.0, the player is always using scaled attributes.", OWML.Common.MessageType.Debug);
-        return true;
     }
 }

@@ -103,14 +103,28 @@ public class PlayerScaleController : ScaleController
         if (ModMain.HikersModAPI == null)
         {
             PlayerCharacterController player = GetComponent<PlayerCharacterController>();
-            player._runSpeed = 6 * Scale;
-            player._strafeSpeed = 4 * Scale;
-            player._walkSpeed = 3 * Scale;
-            player._airSpeed = 3 * Scale;
-            player._acceleration = 0.5f * Scale;
-            player._airAcceleration = 0.09f * Scale;
-            player._minJumpSpeed = 3 * Scale;
-            player._maxJumpSpeed = 7 * Scale;
+            if (ModMain.UseScaledPlayerAttributes)
+            {
+                player._runSpeed = 6 * Scale;
+                player._strafeSpeed = 4 * Scale;
+                player._walkSpeed = 3 * Scale;
+                player._airSpeed = 3 * Scale;
+                player._acceleration = 0.5f * Scale;
+                player._airAcceleration = 0.09f * Scale;
+                player._minJumpSpeed = 3 * Scale;
+                player._maxJumpSpeed = 7 * Scale;
+            }
+            else
+            {
+                player._runSpeed = 6;
+                player._strafeSpeed = 4;
+                player._walkSpeed = 3;
+                player._airSpeed = 3;
+                player._acceleration = 0.5f;
+                player._airAcceleration = 0.09f;
+                player._minJumpSpeed = 3;
+                player._maxJumpSpeed = 7;
+            }
         }
     }
 
@@ -375,7 +389,7 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(JetpackThrusterModel), nameof(JetpackThrusterModel.FireTranslationalThrusters))]
     private static bool JetpackThrusterModel_FireTranslationalThrusters(JetpackThrusterModel __instance)
     {
-        if (Instance.Scale == 1) return true;
+        if (!ModMain.UseScaledPlayerAttributes || Instance.Scale == 1) return true;
 
         float thrustY = __instance._translationalInput.y * __instance._maxTranslationalThrust;
         if (__instance._boostActivated)
@@ -541,7 +555,7 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(PlayerResources), nameof(PlayerResources.GetMaxImpactSpeed))]
     private static void GetImpactSpeed(ref float __result)
     {
-        if (Instance.Scale != 1)
+        if (ModMain.UseScaledPlayerAttributes && Instance.Scale != 1)
         {
             __result *= Mathf.Max(Instance.Scale, Instance.TargetScale);
         }

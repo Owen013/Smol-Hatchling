@@ -21,6 +21,8 @@ public class ModMain : ModBehaviour
 
     public static bool UseScaleHotkeys { get; private set; }
 
+    public static bool UseScaledPlayerAttributes { get; private set; }
+
     public static bool UseOtherCustomScales { get; private set; }
 
     public static float CustomAnglerfishScale { get; private set; }
@@ -53,6 +55,7 @@ public class ModMain : ModBehaviour
         UseCustomPlayerScale = config.GetSettingsValue<bool>("UseCustomPlayerScale");
         CustomPlayerScale = config.GetSettingsValue<float>("CustomPlayerScale");
         UseScaleHotkeys = config.GetSettingsValue<bool>("UseScaleHotkeys");
+        UseScaledPlayerAttributes = config.GetSettingsValue<bool>("UseScaledPlayerAttributes");
         UseOtherCustomScales = config.GetSettingsValue<bool>("UseOtherCustomScales");
         CustomAnglerfishScale = config.GetSettingsValue<float>("CustomAnglerfishScale");
         CustomJellyfishScale = config.GetSettingsValue<float>("CustomJellyfishScale");
@@ -84,6 +87,7 @@ public class ModMain : ModBehaviour
         }
 
         OnConfigured?.Invoke();
+        HikersModAPI?.UpdateConfig();
     }
 
     public void Configure()

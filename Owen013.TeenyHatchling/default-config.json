@@ -25,6 +25,12 @@
       "type": "toggle",
       "value": true
     },
+    "UseScaledPlayerAttributes": {
+      "title": "Use Scaled Player Attributes",
+      "tooltip": "When enabled, your speed, jump height, and damage thresholds will be changed to match your size.",
+      "type": "toggle",
+      "value": true
+    },
 
     "Other Objects": {
       "title": "Other Objects",
