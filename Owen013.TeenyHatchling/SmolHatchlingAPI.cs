@@ -14,7 +14,7 @@ public class SmolHatchlingAPI
         if (PlayerScaleController.Instance == null)
         {
             ModMain.Instance.Print($"Cannot get player scale; player has not spawned or doesn't have scale controller", OWML.Common.MessageType.Error);
-            return 1;
+            return 1f;
         }
         return PlayerScaleController.Instance.Scale;
     }
@@ -27,7 +27,7 @@ public class SmolHatchlingAPI
         if (PlayerScaleController.Instance == null)
         {
             ModMain.Instance.Print($"Cannot get player target scale; player has not spawned or doesn't have scale controller", OWML.Common.MessageType.Error);
-            return 1;
+            return 1f;
         }
         return PlayerScaleController.Instance.TargetScale;
     }

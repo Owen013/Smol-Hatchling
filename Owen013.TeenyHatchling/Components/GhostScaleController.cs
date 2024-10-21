@@ -6,7 +6,7 @@ namespace SmolHatchling.Components;
 [HarmonyPatch]
 public class GhostScaleController : ScaleController
 {
-    public static float StartingScale = 1;
+    public static float StartingScale = 1f;
 
     protected override void FixedUpdate()
     {
@@ -23,7 +23,7 @@ public class GhostScaleController : ScaleController
     private static bool GhostController_MoveToLocalPosition(GhostController __instance)
     {
         ScaleController scaleController = __instance.GetComponent<ScaleController>();
-        if (scaleController == null || scaleController.Scale == 1) return true;
+        if (scaleController == null || scaleController.Scale == 1f) return true;
 
         Vector3 newPosition = __instance.transform.localPosition + __instance._velocity * scaleController.Scale * Time.fixedDeltaTime;
         if (__instance._ghostCollider != null && __instance._ghostCollider.enabled && __instance._playerCollider != null && !__instance._grabController.enabled)
@@ -58,7 +58,7 @@ public class GhostScaleController : ScaleController
                 scaleController.Scale = StartingScale;
             }
 
-            __instance.transform.position += __instance.transform.up * (-1 + scaleController.Scale);
+            __instance.transform.position += __instance.transform.up * (scaleController.Scale - 1f);
         });
     }
 }

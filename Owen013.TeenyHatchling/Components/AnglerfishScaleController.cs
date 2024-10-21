@@ -5,7 +5,7 @@ namespace SmolHatchling.Components;
 [HarmonyPatch]
 public class AnglerfishScaleController : ScaleController
 {
-    public static float StartingScale = 1;
+    public static float StartingScale = 1f;
 
     private AnglerfishController _anglerfishController;
 
@@ -23,9 +23,9 @@ public class AnglerfishScaleController : ScaleController
         }
 
         base.FixedUpdate();
-        _anglerfishController._acceleration = 40 * Scale;
-        _anglerfishController._chaseSpeed = 75 * Scale;
-        _anglerfishController._investigateSpeed = 20 * Scale;
+        _anglerfishController._acceleration = 40f * Scale;
+        _anglerfishController._chaseSpeed = 75f * Scale;
+        _anglerfishController._investigateSpeed = 20f * Scale;
     }
 
     [HarmonyPostfix]

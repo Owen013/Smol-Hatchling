@@ -5,7 +5,7 @@ namespace SmolHatchling.Components;
 [HarmonyPatch]
 public class JellyfishScaleController : ScaleController
 {
-    public static float StartingScale = 1;
+    public static float StartingScale = 1f;
 
     protected override void FixedUpdate()
     {
@@ -22,7 +22,7 @@ public class JellyfishScaleController : ScaleController
     private static bool Jellyfish_FixedUpdate(JellyfishController __instance)
     {
         ScaleController scaleController = __instance.GetComponent<ScaleController>();
-        if (scaleController == null || scaleController.Scale == 1) return true;
+        if (scaleController == null || scaleController.Scale == 1f) return true;
 
         float sqrMagnitude = (__instance._jellyfishBody.GetPosition() - __instance._planetBody.GetPosition()).sqrMagnitude;
         if (__instance._isRising)

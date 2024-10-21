@@ -9,7 +9,7 @@ public class PlayerScaleController : ScaleController
 {
     public static PlayerScaleController Instance { get; private set; }
 
-    public static float StartingScale = 1;
+    public static float StartingScale = 1f;
 
     public float AnimSpeed { get; private set; }
 
@@ -51,7 +51,7 @@ public class PlayerScaleController : ScaleController
             if (_resetButtonHeldTime >= 5f)
             {
                 ModMain.Instance.SetConfigSetting("UseCustomPlayerScale", false);
-                _resetButtonHeldTime = 0;
+                _resetButtonHeldTime = 0f;
                 ModMain.Instance.Print("'Use Custom Player Scale' disabled");
             }
             else
@@ -61,7 +61,7 @@ public class PlayerScaleController : ScaleController
         }
         else
         {
-            _resetButtonHeldTime = 0;
+            _resetButtonHeldTime = 0f;
         }
 
         if (OWInput.IsInputMode(InputMode.Character) && ModMain.Instance.UseCustomPlayerScale && ModMain.Instance.UseScaleHotkeys)
@@ -69,7 +69,7 @@ public class PlayerScaleController : ScaleController
             if (Keyboard.current[Key.Comma].wasPressedThisFrame)
             {
                 float currentScale = ModMain.Instance.CustomPlayerScale;
-                float newScale = currentScale / 2;
+                float newScale = currentScale / 2f;
                 ModMain.Instance.SetConfigSetting("CustomPlayerScale", newScale);
                 SetTargetScale(newScale);
             }
@@ -77,14 +77,14 @@ public class PlayerScaleController : ScaleController
             if (Keyboard.current[Key.Period].wasPressedThisFrame)
             {
                 float currentScale = ModMain.Instance.CustomPlayerScale;
-                float newScale = currentScale * 2;
+                float newScale = currentScale * 2f;
                 ModMain.Instance.SetConfigSetting("CustomPlayerScale", newScale);
                 SetTargetScale(newScale);
             }
 
             if (Keyboard.current[Key.Slash].wasPressedThisFrame)
             {
-                float newScale = 1;
+                float newScale = 1f;
                 ModMain.Instance.SetConfigSetting("CustomPlayerScale", newScale);
                 SetTargetScale(newScale);
             }
@@ -105,35 +105,35 @@ public class PlayerScaleController : ScaleController
             PlayerCharacterController player = GetComponent<PlayerCharacterController>();
             if (ModMain.Instance.UseScaledPlayerAttributes)
             {
-                player._runSpeed = 6 * Scale;
-                player._strafeSpeed = 4 * Scale;
-                player._walkSpeed = 3 * Scale;
-                player._airSpeed = 3 * Scale;
+                player._runSpeed = 6f * Scale;
+                player._strafeSpeed = 4f * Scale;
+                player._walkSpeed = 3f * Scale;
+                player._airSpeed = 3f * Scale;
                 player._acceleration = 0.5f * Scale;
                 player._airAcceleration = 0.09f * Scale;
-                player._minJumpSpeed = 3 * Scale;
-                player._maxJumpSpeed = 7 * Scale;
+                player._minJumpSpeed = 3f * Scale;
+                player._maxJumpSpeed = 7f * Scale;
             }
             else
             {
-                player._runSpeed = 6;
-                player._strafeSpeed = 4;
-                player._walkSpeed = 3;
-                player._airSpeed = 3;
+                player._runSpeed = 6f;
+                player._strafeSpeed = 4f;
+                player._walkSpeed = 3f;
+                player._airSpeed = 3f;
                 player._acceleration = 0.5f;
                 player._airAcceleration = 0.09f;
-                player._minJumpSpeed = 3;
-                player._maxJumpSpeed = 7;
+                player._minJumpSpeed = 3f;
+                player._maxJumpSpeed = 7f;
             }
         }
     }
 
     private void LateUpdate()
     {
-        AnimSpeed = 1 / (Instance.Scale * ModMain.Instance.PlayerWideness);
+        AnimSpeed = 1f / (Instance.Scale * ModMain.Instance.PlayerWideness);
         if (ModMain.Instance.HikersModAPI == null)
         {
-            AnimSpeed = Mathf.Max(Mathf.Sqrt(Locator.GetPlayerController().GetRelativeGroundVelocity().magnitude * AnimSpeed / 6), 1);
+            AnimSpeed = Mathf.Max(Mathf.Sqrt(Locator.GetPlayerController().GetRelativeGroundVelocity().magnitude * AnimSpeed / 6f), 1f);
             if (!ModMain.Instance.IsImmersionInstalled)
             {
                 _animator.speed = AnimSpeed;
@@ -142,8 +142,8 @@ public class PlayerScaleController : ScaleController
 
         PlayerCameraController cameraController = Locator.GetPlayerCameraController();
         cameraController.GetCamera().nearClipPlane = Mathf.Min(0.1f, 0.1f * Scale);
-        cameraController._origLocalPosition.z = 0.15f + 0.30f * (ModMain.Instance.PlayerWideness - 1);
-        _animator.transform.localScale = 0.1f * (Vector3.up + new Vector3(ModMain.Instance.PlayerWideness, 0, ModMain.Instance.PlayerWideness));
+        cameraController._origLocalPosition.z = 0.15f + 0.30f * (ModMain.Instance.PlayerWideness - 1f);
+        _animator.transform.localScale = 0.1f * (Vector3.up + new Vector3(ModMain.Instance.PlayerWideness, 0f, ModMain.Instance.PlayerWideness));
     }
 
     // PATCHES
@@ -153,7 +153,7 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(PlayerCharacterController), nameof(PlayerCharacterController.CastForGrounded))]
     private static bool PlayerCharacterController_CastForGrounded(PlayerCharacterController __instance)
     {
-        if (Instance.Scale == 1) return true;
+        if (Instance.Scale == 1f) return true;
 
         float time = Time.fixedDeltaTime * 60f;
         bool isInFluid = __instance._fluidDetector.InFluidType(FluidVolume.Type.TRACTOR_BEAM) || __instance._fluidDetector.InFluidType(FluidVolume.Type.SAND) || __instance._fluidDetector.InFluidType(FluidVolume.Type.WATER);
@@ -293,7 +293,7 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(PlayerCharacterController), nameof(PlayerCharacterController.UpdateMovement))]
     private static bool PlayerCharacterController_UpdateMovement(PlayerCharacterController __instance)
     {
-        if (Instance.Scale == 1) return true;
+        if (Instance.Scale == 1f) return true;
 
         Vector2 vector = OWInput.GetAxisValue(InputLibrary.moveXZ, InputMode.Character | InputMode.NomaiRemoteCam);
         float magnitude = vector.magnitude;
@@ -322,8 +322,8 @@ public class PlayerScaleController : ScaleController
         if (__instance._jumpChargeTime > 0f && !__instance._useChargeCurve)
         {
             float t = Mathf.InverseLerp(1f, 2f, __instance._jumpChargeTime);
-            num = Mathf.Min(num, Mathf.Lerp(num, 2f * Instance.Scale, t)); //
-            num2 = Mathf.Min(num2, Mathf.Lerp(num2, 2f * Instance.Scale, t)); //
+            num = Mathf.Min(num, Mathf.Lerp(num, 2f * Instance.Scale, t));
+            num2 = Mathf.Min(num2, Mathf.Lerp(num2, 2f * Instance.Scale, t));
         }
         Vector3 a = new Vector3(vector.x * num2, 0f, vector.y * num);
         if (__instance._isStaggered)
@@ -344,7 +344,7 @@ public class PlayerScaleController : ScaleController
             RaycastHit raycastHit;
             if (Physics.Raycast(__instance._transform.position + __instance._transform.TransformDirection(new Vector3(vector.x, 0f, vector.y).normalized * 0.1f * Instance.Scale), -__instance._transform.up, out raycastHit, 20f * Instance.Scale, OWLayerMask.groundMask)) //
             {
-                float num4 = raycastHit.distance / Instance.Scale - 1f; //
+                float num4 = raycastHit.distance / Instance.Scale - 1f;
                 if (num4 > 0.2f && (Vector3.Angle(__instance._owRigidbody.GetLocalUpDirection(), raycastHit.normal) > (float)__instance._maxAngleToBeGrounded || num4 > 1.5f))
                 {
                     a = Vector3.zero;
@@ -389,7 +389,7 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(JetpackThrusterModel), nameof(JetpackThrusterModel.FireTranslationalThrusters))]
     private static bool JetpackThrusterModel_FireTranslationalThrusters(JetpackThrusterModel __instance)
     {
-        if (!ModMain.Instance.UseScaledPlayerAttributes || Instance.Scale == 1) return true;
+        if (!ModMain.Instance.UseScaledPlayerAttributes || Instance.Scale == 1f) return true;
 
         float thrustY = __instance._translationalInput.y * __instance._maxTranslationalThrust;
         if (__instance._boostActivated)
@@ -467,7 +467,7 @@ public class PlayerScaleController : ScaleController
                 scaleController.Scale = StartingScale;
             }
 
-            __instance.transform.position += __instance.GetLocalUpDirection() * (scaleController.Scale - 1);
+            __instance.transform.position += __instance.GetLocalUpDirection() * (scaleController.Scale - 1f);
             ModMain.Instance.HikersModAPI?.UpdateConfig();
         });
     }
@@ -476,7 +476,7 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(ShipCockpitController), nameof(ShipCockpitController.OnPressInteract))]
     private static void EditShipCockpitAttachPoint(ShipCockpitController __instance)
     {
-        __instance._origAttachPointLocalPos = new Vector3(0, 0.3353f + 0.8496f * (1 - Instance.TargetScale), 4.2307f + 0.15f * (1 - Instance.TargetScale));
+        __instance._origAttachPointLocalPos = new Vector3(0, 0.3353f + 0.8496f * (1f - Instance.TargetScale), 4.2307f + 0.15f * (1f - Instance.TargetScale));
     }
 
     [HarmonyPostfix]
@@ -484,7 +484,7 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(Campfire), nameof(Campfire.StartSleeping))]
     private static void EditCampfireAttachOffset(Campfire __instance)
     {
-        __instance._attachPoint._attachOffset *= 0.5f * (1 + Instance.TargetScale);
+        __instance._attachPoint._attachOffset *= 0.5f * (1f + Instance.TargetScale);
         __instance._attachPoint._attachOffset.y = Instance.TargetScale;
     }
 
@@ -492,35 +492,35 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(GhostGrabController), nameof(GhostGrabController.OnStartLiftPlayer))]
     private static void EditGhostAttachOffset(GhostGrabController __instance)
     {
-        __instance._attachPoint._attachOffset = new Vector3(0, 0.8496f * (1 - Instance.Scale), 0.15f * (1 - Instance.Scale));
+        __instance._attachPoint._attachOffset = new Vector3(0, 0.8496f * (1f - Instance.Scale), 0.15f * (1f - Instance.Scale));
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(RemoteFlightConsole), nameof(RemoteFlightConsole.OnPressInteract))]
     private static void EditModelRocketAttachOffset(RemoteFlightConsole __instance)
     {
-        __instance._attachPoint._attachOffset.y = -1 + Instance.TargetScale;
+        __instance._attachPoint._attachOffset.y = Instance.TargetScale - 1f;
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(Elevator), nameof(Elevator.OnPressInteract))]
     private static void EditElevatorAttachOffset(Elevator __instance)
     {
-        __instance._attachPoint._attachOffset.y = -1 + Instance.TargetScale;
+        __instance._attachPoint._attachOffset.y = Instance.TargetScale - 1f;
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(ShipLogController), nameof(ShipLogController.OnPressInteract))]
     private static void EditShipLogAttachOffset(ShipLogController __instance)
     {
-        __instance._attachPoint._attachOffset = new Vector3(0, 0.8496f * (1 - Instance.TargetScale), 0.15f * (1 - Instance.TargetScale));
+        __instance._attachPoint._attachOffset = new Vector3(0f, 0.8496f * (1f - Instance.TargetScale), 0.15f * (1f - Instance.TargetScale));
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(StationaryProbeLauncher), nameof(StationaryProbeLauncher.OnPressInteract))]
     private static void EditStationaryProbeLauncherAttachOffset(StationaryProbeLauncher __instance)
     {
-        __instance._attachPoint._attachOffset = new Vector3(0, 0.8496f * (1 - Instance.TargetScale), 0.15f * (1 - Instance.TargetScale));
+        __instance._attachPoint._attachOffset = new Vector3(0f, 0.8496f * (1f - Instance.TargetScale), 0.15f * (1f - Instance.TargetScale));
     }
 
     [HarmonyPostfix]
@@ -555,7 +555,7 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(PlayerResources), nameof(PlayerResources.GetMaxImpactSpeed))]
     private static void GetImpactSpeed(ref float __result)
     {
-        if (ModMain.Instance.UseScaledPlayerAttributes && Instance.Scale != 1)
+        if (ModMain.Instance.UseScaledPlayerAttributes && Instance.Scale != 1f)
         {
             __result *= Mathf.Max(Instance.Scale, Instance.TargetScale);
         }
@@ -565,7 +565,7 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(MarshmallowCollider), nameof(MarshmallowCollider.Awake))]
     private static void ResizeMarshmallow(Marshmallow __instance)
     {
-        if (Instance.Scale != 1)
+        if (Instance.Scale != 1f)
         {
             __instance.transform.localScale *= Instance.Scale;
         }

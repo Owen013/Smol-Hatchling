@@ -61,28 +61,28 @@ public class ModMain : ModBehaviour
         CustomInhabitantScale = config.GetSettingsValue<float>("CustomInhabitantScale");
         PlayerWideness = config.GetSettingsValue<float>("PlayerWideness");
 
-        if (CustomPlayerScale <= 0)
+        if (CustomPlayerScale <= 0f)
         {
             Print("Player Scale cannot be 0 or less.", MessageType.Error);
-            SetConfigSetting("CustomPlayerScale", 1);
+            SetConfigSetting("CustomPlayerScale", 1f);
         }
 
-        if (CustomAnglerfishScale <= 0)
+        if (CustomAnglerfishScale <= 0f)
         {
             Print("Anglerfish Scale cannot be 0 or less.", MessageType.Error);
-            SetConfigSetting("CustomAnglerfishScale", 1);
+            SetConfigSetting("CustomAnglerfishScale", 1f);
         }
 
-        if (CustomJellyfishScale <= 0)
+        if (CustomJellyfishScale <= 0f)
         {
             Print("Jellyfish Scale cannot be 0 or less.", MessageType.Error);
-            SetConfigSetting("CustomJellyfishScale", 1);
+            SetConfigSetting("CustomJellyfishScale", 1f);
         }
 
-        if (CustomInhabitantScale <= 0)
+        if (CustomInhabitantScale <= 0f)
         {
             Print("Inhabitant Scale cannot be 0 or less.", MessageType.Error);
-            SetConfigSetting("CustomInhabitantScale", 1);
+            SetConfigSetting("CustomInhabitantScale", 1f);
         }
 
         OnConfigured?.Invoke();
