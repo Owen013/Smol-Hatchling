@@ -125,8 +125,10 @@ public class ModMain : ModBehaviour
  *  ISSUES
  *  - Footstep particles stay huge when you shrink back down (may have fixed itself??? be on lookout) (nope...nevermind. rare)
  *  - flashlight distance doesn't scale
- *  - maybe i should reduce wind volume when big?
  *  - damage movement speed damping may not scale
+ *  
+ *  IDEAS
+ *  - maybe i should reduce wind volume when big?
  *  - make probe bigger (or smoller) when launched
  *  
  */

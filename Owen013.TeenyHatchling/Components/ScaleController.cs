@@ -20,6 +20,8 @@ public class ScaleController : MonoBehaviour
 
     public float TargetScale { get; private set; }
 
+    private Vector3 _scaleVelocity;
+
     public virtual void SetTargetScale(float scale)
     {
         TargetScale = scale;
@@ -34,8 +36,7 @@ public class ScaleController : MonoBehaviour
     {
         if (Scale != TargetScale)
         {
-            transform.localScale = Vector3.MoveTowards(transform.localScale, Vector3.Lerp(transform.localScale, Vector3.one * TargetScale, 0.1f), Time.deltaTime * Scale);
-            if (Mathf.Abs(Scale - TargetScale) < Scale * 0.005f) Scale = TargetScale;
+            transform.localScale = Vector3.SmoothDamp(transform.localScale, Vector3.one * TargetScale, ref _scaleVelocity, 0.1f, Scale);
         }
     }
 }

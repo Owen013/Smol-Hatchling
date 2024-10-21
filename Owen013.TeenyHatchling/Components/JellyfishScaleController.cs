@@ -17,25 +17,6 @@ public class JellyfishScaleController : ScaleController
         base.FixedUpdate();
     }
 
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(JellyfishController), nameof(JellyfishController.Start))]
-    private static void AddScaleControllerToJellyfish(JellyfishController __instance)
-    {
-        ScaleController scaleController = __instance.gameObject.AddComponent<JellyfishScaleController>();
-        // fire on the next update to avoid breaking things
-        ModMain.Instance.ModHelper.Events.Unity.FireOnNextUpdate(() =>
-        {
-            if (ModMain.Instance.UseOtherCustomScales)
-            {
-                scaleController.Scale = ModMain.Instance.CustomJellyfishScale;
-            }
-            else
-            {
-                scaleController.Scale = DefaultScale;
-            }
-        });
-    }
-
     [HarmonyPrefix]
     [HarmonyPatch(typeof(JellyfishController), nameof(JellyfishController.FixedUpdate))]
     private static bool Jellyfish_FixedUpdate(JellyfishController __instance)
@@ -65,5 +46,24 @@ public class JellyfishScaleController : ScaleController
         }
 
         return false;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(JellyfishController), nameof(JellyfishController.Start))]
+    private static void AddScaleControllerToJellyfish(JellyfishController __instance)
+    {
+        ScaleController scaleController = __instance.gameObject.AddComponent<JellyfishScaleController>();
+        // fire on the next update to avoid breaking things
+        ModMain.Instance.ModHelper.Events.Unity.FireOnNextUpdate(() =>
+        {
+            if (ModMain.Instance.UseOtherCustomScales)
+            {
+                scaleController.Scale = ModMain.Instance.CustomJellyfishScale;
+            }
+            else
+            {
+                scaleController.Scale = DefaultScale;
+            }
+        });
     }
 }
