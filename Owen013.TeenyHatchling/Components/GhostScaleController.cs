@@ -6,7 +6,7 @@ namespace SmolHatchling.Components;
 [HarmonyPatch]
 public class GhostScaleController : ScaleController
 {
-    public static float DefaultScale = 1;
+    public static float StartingScale = 1;
 
     protected override void FixedUpdate()
     {
@@ -55,7 +55,7 @@ public class GhostScaleController : ScaleController
             }
             else
             {
-                scaleController.Scale = DefaultScale;
+                scaleController.Scale = StartingScale;
             }
 
             __instance.transform.position += __instance.transform.up * (-1 + scaleController.Scale);

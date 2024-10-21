@@ -5,7 +5,7 @@ namespace SmolHatchling.Components;
 [HarmonyPatch]
 public class AnglerfishScaleController : ScaleController
 {
-    public static float DefaultScale = 1;
+    public static float StartingScale = 1;
 
     private AnglerfishController _anglerfishController;
 
@@ -42,7 +42,7 @@ public class AnglerfishScaleController : ScaleController
             }
             else
             {
-                scaleController.Scale = DefaultScale;
+                scaleController.Scale = StartingScale;
             }
         });
     }

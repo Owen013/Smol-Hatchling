@@ -9,7 +9,7 @@ public class PlayerScaleController : ScaleController
 {
     public static PlayerScaleController Instance { get; private set; }
 
-    public static float DefaultScale = 1;
+    public static float StartingScale = 1;
 
     public float AnimSpeed { get; private set; }
 
@@ -130,10 +130,10 @@ public class PlayerScaleController : ScaleController
 
     private void LateUpdate()
     {
-        AnimSpeed = 1f / Instance.Scale;
+        AnimSpeed = 1 / (Instance.Scale * ModMain.Instance.PlayerWideness);
         if (ModMain.Instance.HikersModAPI == null)
         {
-            AnimSpeed = Mathf.Max(Mathf.Sqrt(Locator.GetPlayerController().GetRelativeGroundVelocity().magnitude * AnimSpeed / (6f * ModMain.Instance.PlayerWideness)), 1f);
+            AnimSpeed = Mathf.Max(Mathf.Sqrt(Locator.GetPlayerController().GetRelativeGroundVelocity().magnitude * AnimSpeed / 6), 1);
             if (!ModMain.Instance.IsImmersionInstalled)
             {
                 _animator.speed = AnimSpeed;
@@ -441,7 +441,7 @@ public class PlayerScaleController : ScaleController
     // this prefix is added manually if Hiker's Mod is not installed
     internal static bool DreamLanternItem_OverrideMaxRunSpeed(ref float maxSpeedX, ref float maxSpeedZ, DreamLanternItem __instance)
     {
-        if (Instance.Scale == 1) return true;
+        if (!ModMain.Instance.UseScaledPlayerAttributes || Instance.Scale == 1) return true;
 
         float lerpPosition = 1f - __instance._lanternController.GetFocus();
         lerpPosition *= lerpPosition;
@@ -464,10 +464,10 @@ public class PlayerScaleController : ScaleController
             }
             else
             {
-                scaleController.Scale = DefaultScale;
+                scaleController.Scale = StartingScale;
             }
 
-            __instance.transform.position += __instance.GetLocalUpDirection() * (-1 + scaleController.Scale);
+            __instance.transform.position += __instance.GetLocalUpDirection() * (scaleController.Scale - 1);
             ModMain.Instance.HikersModAPI?.UpdateConfig();
         });
     }

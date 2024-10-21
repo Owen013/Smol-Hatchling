@@ -5,7 +5,7 @@ namespace SmolHatchling.Components;
 [HarmonyPatch]
 public class JellyfishScaleController : ScaleController
 {
-    public static float DefaultScale = 1;
+    public static float StartingScale = 1;
 
     protected override void FixedUpdate()
     {
@@ -62,7 +62,7 @@ public class JellyfishScaleController : ScaleController
             }
             else
             {
-                scaleController.Scale = DefaultScale;
+                scaleController.Scale = StartingScale;
             }
         });
     }

@@ -11,7 +11,11 @@ public class SmolHatchlingAPI
     /// </summary>
     public float GetPlayerScale()
     {
-        if (PlayerScaleController.Instance == null) return 1;
+        if (PlayerScaleController.Instance == null)
+        {
+            ModMain.Instance.Print($"Cannot get player scale; player has not spawned or doesn't have scale controller", OWML.Common.MessageType.Error);
+            return 1;
+        }
         return PlayerScaleController.Instance.Scale;
     }
 
@@ -20,14 +24,47 @@ public class SmolHatchlingAPI
     /// </summary>
     public float GetPlayerTargetScale()
     {
-        if (PlayerScaleController.Instance == null) return 1;
+        if (PlayerScaleController.Instance == null)
+        {
+            ModMain.Instance.Print($"Cannot get player target scale; player has not spawned or doesn't have scale controller", OWML.Common.MessageType.Error);
+            return 1;
+        }
         return PlayerScaleController.Instance.TargetScale;
+    }
+
+    /// <summary>
+    /// Instantly resizes the player.
+    /// </summary>
+    /// <param name="scale">The scale to resize the player to.</param>
+    /// <param name="remainGrounded">If true, moves the player up/down so that they will still be on the ground after the resizing.</param>
+    public void SetPlayerScale(float scale, bool remainGrounded = false)
+    {
+        if (PlayerScaleController.Instance == null)
+        {
+            ModMain.Instance.Print($"Cannot set player scale; player has not spawned or doesn't have scale controller", OWML.Common.MessageType.Error);
+            return;
+        }
+        PlayerScaleController.Instance.Scale = scale;
+    }
+
+    /// <summary>
+    /// Smoothly resizes the player over a few seconds.
+    /// </summary>
+    /// <param name="scale">The scale to resize the player to.</param>
+    public void EasePlayerToScale(float scale)
+    {
+        if (PlayerScaleController.Instance == null)
+        {
+            ModMain.Instance.Print($"Cannot set player target scale; player has not spawned or doesn't have scale controller", OWML.Common.MessageType.Error);
+            return;
+        }
+        PlayerScaleController.Instance.SetTargetScale(scale);
     }
 
     /// <summary>
     /// Returns true if Smol Hatchling is scaling the player's speed, jump height, and damage thresholds to match their size.
     /// </summary>
-    public bool UseScaledPlayerAttributes()
+    public bool IsScalingPlayerAttributes()
     {
         return ModMain.Instance.UseScaledPlayerAttributes;
     }
@@ -41,39 +78,39 @@ public class SmolHatchlingAPI
     }
 
     /// <summary>
-    /// The scale the player will be when they start.
+    /// Sets the scale the player will be when they start.
     /// </summary>
-    /// <param name="scale">The default scale the player should be.</param>
-    public void SetPlayerDefaultScale(float scale)
+    /// <param name="scale">The scale the player should be when they start.</param>
+    public void SetPlayerStartingScale(float scale)
     {
-        PlayerScaleController.DefaultScale = scale;
+        PlayerScaleController.StartingScale = scale;
     }
 
     /// <summary>
-    /// The scale anglerfish will be when they start.
+    /// Sets the scale anglerfish will be when they start.
     /// </summary>
-    /// <param name="scale">The default scale anglerfish should be.</param>
-    public void SetAnglerfishDefaultScale(float scale)
+    /// <param name="scale">The scale anglerfish will be when they start.</param>
+    public void SetAnglerfishStartingScale(float scale)
     {
-        AnglerfishScaleController.DefaultScale = scale;
+        AnglerfishScaleController.StartingScale = scale;
     }
 
     /// <summary>
-    /// The scale anglerfish will be when they start.
+    /// Sets the scale jellyfish will be when they start.
     /// </summary>
-    /// <param name="scale">The default scale jellyfish should be.</param>
-    public void SetJellyfishDefaultScale(float scale)
+    /// <param name="scale">The scale jellyfish will be when they start.</param>
+    public void SetJellyfishStartingScale(float scale)
     {
-        JellyfishScaleController.DefaultScale = scale;
+        JellyfishScaleController.StartingScale = scale;
     }
 
     /// <summary>
-    /// The scale inhabitants will be when they start.
+    /// Sets the scale inhabitants will be when they start.
     /// </summary>
-    /// <param name="scale">The default scale inhabitants should be.</param>
-    public void SetInhabitantDefaultScale(float scale)
+    /// <param name="scale">The scale inhabitants will be when they start.</param>
+    public void SetInhabitantStartingScale(float scale)
     {
-        GhostScaleController.DefaultScale = scale;
+        GhostScaleController.StartingScale = scale;
     }
 
     /// <summary>
@@ -157,5 +194,40 @@ public class SmolHatchlingAPI
     {
         ModMain.Instance.Print("GetAnimSpeed() is deprecated. Use GetPlayerAnimSpeed() instead.", OWML.Common.MessageType.Debug);
         return PlayerScaleController.Instance.AnimSpeed;
+    }
+
+    [Obsolete("UseScaledPlayerAttributes() is deprecated. Use IsScalingPlayerAttributes() instead.")]
+    public bool UseScaledPlayerAttributes()
+    {
+        ModMain.Instance.Print("UseScaledPlayerAttributes() is deprecated. Use IsScalingPlayerAttributes() instead.", OWML.Common.MessageType.Debug);
+        return ModMain.Instance.UseScaledPlayerAttributes;
+    }
+
+    [Obsolete("SetPlayerDefaultScale() is deprecated. Use SetPlayerStartingScale() instead.")]
+    public void SetPlayerDefaultScale(float scale)
+    {
+        ModMain.Instance.Print("SetPlayerDefaultScale() is deprecated. Use SetPlayerStartingScale() instead.", OWML.Common.MessageType.Debug);
+        PlayerScaleController.StartingScale = scale;
+    }
+
+    [Obsolete("SetAnglerfishDefaultScale() is deprecated. Use SetAnglerfishStartingScale() instead.")]
+    public void SetAnglerfishDefaultScale(float scale)
+    {
+        ModMain.Instance.Print("SetAnglerfishDefaultScale() is deprecated. Use SetAnglerfishStartingScale() instead.", OWML.Common.MessageType.Debug);
+        AnglerfishScaleController.StartingScale = scale;
+    }
+
+    [Obsolete("SetJellyfishDefaultScale() is deprecated. Use SetJellyfishStartingScale() instead.")]
+    public void SetJellyfishDefaultScale(float scale)
+    {
+        ModMain.Instance.Print("SetJellyfishDefaultScale() is deprecated. Use SetJellyfishStartingScale() instead.", OWML.Common.MessageType.Debug);
+        JellyfishScaleController.StartingScale = scale;
+    }
+
+    [Obsolete("SetInhabitantDefaultScale() is deprecated. Use SetInhabitantStartingScale() instead.")]
+    public void SetInhabitantDefaultScale(float scale)
+    {
+        ModMain.Instance.Print("SetInhabitantDefaultScale() is deprecated. Use SetInhabitantStartingScale() instead.", OWML.Common.MessageType.Debug);
+        GhostScaleController.StartingScale = scale;
     }
 }

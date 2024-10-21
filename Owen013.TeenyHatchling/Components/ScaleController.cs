@@ -38,5 +38,9 @@ public class ScaleController : MonoBehaviour
         {
             transform.localScale = Vector3.SmoothDamp(transform.localScale, Vector3.one * TargetScale, ref _scaleVelocity, 0.1f, Scale);
         }
+        else
+        {
+            _scaleVelocity = Vector3.zero;
+        }
     }
 }
