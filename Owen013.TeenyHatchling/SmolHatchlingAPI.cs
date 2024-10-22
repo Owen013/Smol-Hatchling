@@ -36,15 +36,16 @@ public class SmolHatchlingAPI
     /// Instantly resizes the player.
     /// </summary>
     /// <param name="scale">The scale to resize the player to.</param>
-    /// <param name="remainGrounded">If true, moves the player up/down so that they will still be on the ground after the resizing.</param>
+    /// <param name="remainGrounded">If true, moves the player up/down so that the bottom of their collider will be in the same postion after being resized.</param>
     public void SetPlayerScale(float scale, bool remainGrounded = false)
     {
-        if (PlayerScaleController.Instance == null)
+        PlayerScaleController scaleController = PlayerScaleController.Instance;
+        if (scaleController == null)
         {
             ModMain.Instance.Print($"Cannot set player scale; player has not spawned or doesn't have scale controller", OWML.Common.MessageType.Error);
             return;
         }
-        PlayerScaleController.Instance.Scale = scale;
+        scaleController.SetScale(scale, remainGrounded);
     }
 
     /// <summary>
@@ -64,9 +65,9 @@ public class SmolHatchlingAPI
     /// <summary>
     /// Returns true if Smol Hatchling is scaling the player's speed, jump height, and damage thresholds to match their size.
     /// </summary>
-    public bool IsScalingPlayerAttributes()
+    public bool UsingScaledPlayerAttributes()
     {
-        return ModMain.Instance.UseScaledPlayerAttributes;
+        return ModMain.Instance.UsingScaledPlayerAttributes;
     }
 
     /// <summary>
@@ -141,7 +142,7 @@ public class SmolHatchlingAPI
             }
         }
 
-        scaleController.Scale = scale;
+        scaleController.SetScale(scale);
     }
 
     /// <summary>
@@ -200,7 +201,7 @@ public class SmolHatchlingAPI
     public bool UseScaledPlayerAttributes()
     {
         ModMain.Instance.Print("UseScaledPlayerAttributes() is deprecated. Use IsScalingPlayerAttributes() instead.", OWML.Common.MessageType.Debug);
-        return ModMain.Instance.UseScaledPlayerAttributes;
+        return ModMain.Instance.UsingScaledPlayerAttributes;
     }
 
     [Obsolete("SetPlayerDefaultScale() is deprecated. Use SetPlayerStartingScale() instead.")]

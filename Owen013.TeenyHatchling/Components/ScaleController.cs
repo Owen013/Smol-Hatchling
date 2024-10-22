@@ -4,23 +4,23 @@ namespace SmolHatchling.Components;
 
 public class ScaleController : MonoBehaviour
 {
-    public virtual float Scale
+    public float Scale
     {
         get
         {
             return transform.localScale.x;
-        }
-
-        set
-        {
-            transform.localScale = Vector3.one * value;
-            SetTargetScale(value);
         }
     }
 
     public float TargetScale { get; private set; }
 
     private Vector3 _scaleVelocity;
+
+    public virtual void SetScale(float scale)
+    {
+        transform.localScale = Vector3.one * scale;
+        SetTargetScale(scale);
+    }
 
     public virtual void SetTargetScale(float scale)
     {
@@ -36,7 +36,7 @@ public class ScaleController : MonoBehaviour
     {
         if (Scale != TargetScale)
         {
-            transform.localScale = Vector3.SmoothDamp(transform.localScale, Vector3.one * TargetScale, ref _scaleVelocity, 0.1f, Scale);
+            transform.localScale = Vector3.SmoothDamp(transform.localScale, Vector3.one * TargetScale, ref _scaleVelocity, 0.25f, Scale);
         }
         else
         {

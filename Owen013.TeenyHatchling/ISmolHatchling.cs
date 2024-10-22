@@ -19,7 +19,7 @@ public interface ISmolHatchling
     /// Instantly resizes the player.
     /// </summary>
     /// <param name="scale">The scale to resize the player to.</param>
-    /// <param name="remainGrounded">If true, moves the player up/down so that they will still be on the ground after the resizing.</param>
+    /// <param name="remainGrounded">If true, moves the player up/down so that the bottom of their collider will be in the same postion after being resized.</param>
     public void SetPlayerScale(float scale, bool remainGrounded = false);
 
     /// <summary>
@@ -31,7 +31,7 @@ public interface ISmolHatchling
     /// <summary>
     /// Returns true if Smol Hatchling is scaling the player's speed, jump height, and damage thresholds to match their size.
     /// </summary>
-    public bool IsScalingPlayerAttributes();
+    public bool UsingScaledPlayerAttributes();
 
     /// <summary>
     /// Returns the animation speed multiplier.

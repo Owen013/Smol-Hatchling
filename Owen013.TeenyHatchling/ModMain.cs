@@ -15,15 +15,15 @@ public class ModMain : ModBehaviour
 
     public bool IsImmersionInstalled { get; private set; }
 
-    public bool UseCustomPlayerScale { get; private set; }
+    public bool UsingCustomPlayerScale { get; private set; }
 
     public float CustomPlayerScale { get; private set; }
 
-    public bool UseScaleHotkeys { get; private set; }
+    public bool UsingScaleHotkeys { get; private set; }
 
-    public bool UseScaledPlayerAttributes { get; private set; }
+    public bool UsingScaledPlayerAttributes { get; private set; }
 
-    public bool UseOtherCustomScales { get; private set; }
+    public bool UsingOtherCustomScales { get; private set; }
 
     public float CustomAnglerfishScale { get; private set; }
 
@@ -51,11 +51,11 @@ public class ModMain : ModBehaviour
     {
         base.Configure(config);
 
-        UseCustomPlayerScale = config.GetSettingsValue<bool>("UseCustomPlayerScale");
+        UsingCustomPlayerScale = config.GetSettingsValue<bool>("UsingCustomPlayerScale");
         CustomPlayerScale = config.GetSettingsValue<float>("CustomPlayerScale");
-        UseScaleHotkeys = config.GetSettingsValue<bool>("UseScaleHotkeys");
-        UseScaledPlayerAttributes = config.GetSettingsValue<bool>("UseScaledPlayerAttributes");
-        UseOtherCustomScales = config.GetSettingsValue<bool>("UseOtherCustomScales");
+        UsingScaleHotkeys = config.GetSettingsValue<bool>("UsingScaleHotkeys");
+        UsingScaledPlayerAttributes = config.GetSettingsValue<bool>("UsingScaledPlayerAttributes");
+        UsingOtherCustomScales = config.GetSettingsValue<bool>("UsingOtherCustomScales");
         CustomAnglerfishScale = config.GetSettingsValue<float>("CustomAnglerfishScale");
         CustomJellyfishScale = config.GetSettingsValue<float>("CustomJellyfishScale");
         CustomInhabitantScale = config.GetSettingsValue<float>("CustomInhabitantScale");
