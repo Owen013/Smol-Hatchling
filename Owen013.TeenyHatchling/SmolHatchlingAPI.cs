@@ -1,4 +1,5 @@
-﻿using SmolHatchling.Components;
+﻿using OWML.Common;
+using SmolHatchling.Components;
 using System;
 using UnityEngine;
 
@@ -11,11 +12,6 @@ public class SmolHatchlingAPI
     /// </summary>
     public float GetPlayerScale()
     {
-        if (PlayerScaleController.Instance == null)
-        {
-            ModMain.Instance.Print($"Cannot get player scale; player has not spawned or doesn't have scale controller", OWML.Common.MessageType.Error);
-            return 1f;
-        }
         return PlayerScaleController.Instance.Scale;
     }
 
@@ -24,11 +20,6 @@ public class SmolHatchlingAPI
     /// </summary>
     public float GetPlayerTargetScale()
     {
-        if (PlayerScaleController.Instance == null)
-        {
-            ModMain.Instance.Print($"Cannot get player target scale; player has not spawned or doesn't have scale controller", OWML.Common.MessageType.Error);
-            return 1f;
-        }
         return PlayerScaleController.Instance.TargetScale;
     }
 
@@ -36,16 +27,9 @@ public class SmolHatchlingAPI
     /// Instantly resizes the player.
     /// </summary>
     /// <param name="scale">The scale to resize the player to.</param>
-    /// <param name="remainGrounded">If true, moves the player up/down so that the bottom of their collider will be in the same postion after being resized.</param>
-    public void SetPlayerScale(float scale, bool remainGrounded = false)
+    public void SetPlayerScale(float scale)
     {
-        PlayerScaleController scaleController = PlayerScaleController.Instance;
-        if (scaleController == null)
-        {
-            ModMain.Instance.Print($"Cannot set player scale; player has not spawned or doesn't have scale controller", OWML.Common.MessageType.Error);
-            return;
-        }
-        scaleController.SetScale(scale, remainGrounded);
+        PlayerScaleController.Instance.SetScale(scale);
     }
 
     /// <summary>
@@ -54,11 +38,6 @@ public class SmolHatchlingAPI
     /// <param name="scale">The scale to resize the player to.</param>
     public void EasePlayerToScale(float scale)
     {
-        if (PlayerScaleController.Instance == null)
-        {
-            ModMain.Instance.Print($"Cannot set player target scale; player has not spawned or doesn't have scale controller", OWML.Common.MessageType.Error);
-            return;
-        }
         PlayerScaleController.Instance.SetTargetScale(scale);
     }
 
@@ -179,56 +158,56 @@ public class SmolHatchlingAPI
     [Obsolete("GetTargetScale() is deprecated. Use GetPlayerScale() instead.")]
     public Vector3 GetTargetScale()
     {
-        ModMain.Instance.Print("GetTargetScale() is deprecated. Use GetPlayerScale() instead.", OWML.Common.MessageType.Debug);
+        ModMain.Instance.Print("GetTargetScale() is deprecated. Use GetPlayerScale() instead.", MessageType.Debug);
         return Vector3.one * PlayerScaleController.Instance.TargetScale;
     }
 
     [Obsolete("GetCurrentScale() is deprecated. Use GetPlayerScale() instead.")]
     public Vector3 GetCurrentScale()
     {
-        ModMain.Instance.Print("GetCurrentScale() is deprecated. Use GetPlayerScale() instead.", OWML.Common.MessageType.Debug);
+        ModMain.Instance.Print("GetCurrentScale() is deprecated. Use GetPlayerScale() instead.", MessageType.Debug);
         return Vector3.one * PlayerScaleController.Instance.Scale;
     }
 
     [Obsolete("GetAnimSpeed() is deprecated. Use GetPlayerAnimSpeed() instead.")]
     public float GetAnimSpeed()
     {
-        ModMain.Instance.Print("GetAnimSpeed() is deprecated. Use GetPlayerAnimSpeed() instead.", OWML.Common.MessageType.Debug);
+        ModMain.Instance.Print("GetAnimSpeed() is deprecated. Use GetPlayerAnimSpeed() instead.", MessageType.Debug);
         return PlayerScaleController.Instance.AnimSpeed;
     }
 
     [Obsolete("UseScaledPlayerAttributes() is deprecated. Use IsScalingPlayerAttributes() instead.")]
     public bool UseScaledPlayerAttributes()
     {
-        ModMain.Instance.Print("UseScaledPlayerAttributes() is deprecated. Use IsScalingPlayerAttributes() instead.", OWML.Common.MessageType.Debug);
+        ModMain.Instance.Print("UseScaledPlayerAttributes() is deprecated. Use IsScalingPlayerAttributes() instead.", MessageType.Debug);
         return ModMain.Instance.UsingScaledPlayerAttributes;
     }
 
     [Obsolete("SetPlayerDefaultScale() is deprecated. Use SetPlayerStartingScale() instead.")]
     public void SetPlayerDefaultScale(float scale)
     {
-        ModMain.Instance.Print("SetPlayerDefaultScale() is deprecated. Use SetPlayerStartingScale() instead.", OWML.Common.MessageType.Debug);
+        ModMain.Instance.Print("SetPlayerDefaultScale() is deprecated. Use SetPlayerStartingScale() instead.", MessageType.Debug);
         PlayerScaleController.StartingScale = scale;
     }
 
     [Obsolete("SetAnglerfishDefaultScale() is deprecated. Use SetAnglerfishStartingScale() instead.")]
     public void SetAnglerfishDefaultScale(float scale)
     {
-        ModMain.Instance.Print("SetAnglerfishDefaultScale() is deprecated. Use SetAnglerfishStartingScale() instead.", OWML.Common.MessageType.Debug);
+        ModMain.Instance.Print("SetAnglerfishDefaultScale() is deprecated. Use SetAnglerfishStartingScale() instead.", MessageType.Debug);
         AnglerfishScaleController.StartingScale = scale;
     }
 
     [Obsolete("SetJellyfishDefaultScale() is deprecated. Use SetJellyfishStartingScale() instead.")]
     public void SetJellyfishDefaultScale(float scale)
     {
-        ModMain.Instance.Print("SetJellyfishDefaultScale() is deprecated. Use SetJellyfishStartingScale() instead.", OWML.Common.MessageType.Debug);
+        ModMain.Instance.Print("SetJellyfishDefaultScale() is deprecated. Use SetJellyfishStartingScale() instead.", MessageType.Debug);
         JellyfishScaleController.StartingScale = scale;
     }
 
     [Obsolete("SetInhabitantDefaultScale() is deprecated. Use SetInhabitantStartingScale() instead.")]
     public void SetInhabitantDefaultScale(float scale)
     {
-        ModMain.Instance.Print("SetInhabitantDefaultScale() is deprecated. Use SetInhabitantStartingScale() instead.", OWML.Common.MessageType.Debug);
+        ModMain.Instance.Print("SetInhabitantDefaultScale() is deprecated. Use SetInhabitantStartingScale() instead.", MessageType.Debug);
         GhostScaleController.StartingScale = scale;
     }
 }

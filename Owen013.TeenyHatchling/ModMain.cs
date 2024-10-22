@@ -4,6 +4,8 @@ using OWML.ModHelper;
 using SmolHatchling.Components;
 using SmolHatchling.Interfaces;
 using System.Reflection;
+using UnityEngine.InputSystem;
+using UnityEngine;
 
 namespace SmolHatchling;
 
@@ -33,14 +35,11 @@ public class ModMain : ModBehaviour
 
     public float PlayerWideness { get; private set; }
 
+    private float _resetButtonHeldTime;
+
     public delegate void ConfigureEvent();
 
     public event ConfigureEvent OnConfigured;
-
-    public void Print(string text, MessageType messageType = MessageType.Message)
-    {
-        ModHelper.Console.WriteLine(text, messageType);
-    }
 
     public override object GetApi()
     {
@@ -89,6 +88,11 @@ public class ModMain : ModBehaviour
         HikersModAPI?.UpdateConfig();
     }
 
+    public void Print(string text, MessageType messageType = MessageType.Message)
+    {
+        ModHelper.Console.WriteLine(text, messageType);
+    }
+
     public void Configure()
     {
         Configure(ModHelper.Config);
@@ -117,6 +121,28 @@ public class ModMain : ModBehaviour
         }
 
         Print($"Smol Hatchling is ready to go!", MessageType.Success);
+    }
+
+    private void Update()
+    {
+        if (UsingCustomPlayerScale || UsingOtherCustomScales && Keyboard.current[Key.Slash].isPressed)
+        {
+            if (_resetButtonHeldTime >= 5f)
+            {
+                SetConfigSetting("UsingCustomPlayerScale", false);
+                SetConfigSetting("UsingOtherCustomScales", false);
+                _resetButtonHeldTime = 0f;
+                Print("Custom Scales disabled");
+            }
+            else
+            {
+                _resetButtonHeldTime += Time.unscaledDeltaTime;
+            }
+        }
+        else
+        {
+            _resetButtonHeldTime = 0f;
+        }
     }
 }
 

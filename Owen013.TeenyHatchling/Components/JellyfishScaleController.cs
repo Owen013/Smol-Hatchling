@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using OWML.Common;
 
 namespace SmolHatchling.Components;
 

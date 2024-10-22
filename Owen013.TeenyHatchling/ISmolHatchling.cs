@@ -19,8 +19,7 @@ public interface ISmolHatchling
     /// Instantly resizes the player.
     /// </summary>
     /// <param name="scale">The scale to resize the player to.</param>
-    /// <param name="remainGrounded">If true, moves the player up/down so that the bottom of their collider will be in the same postion after being resized.</param>
-    public void SetPlayerScale(float scale, bool remainGrounded = false);
+    public void SetPlayerScale(float scale);
 
     /// <summary>
     /// Smoothly resizes the player over a few seconds.

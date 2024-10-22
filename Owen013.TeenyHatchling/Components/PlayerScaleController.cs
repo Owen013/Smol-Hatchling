@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using OWML.Common;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,14 +16,6 @@ public class PlayerScaleController : ScaleController
 
     private Animator _animator;
 
-    private float _resetButtonHeldTime;
-
-    public override void SetScale(float scale)
-    {
-        base.SetScale(scale);
-        ModMain.Instance.HikersModAPI?.UpdateConfig();
-    }
-
     public override void SetTargetScale(float scale)
     {
         base.SetTargetScale(scale);
@@ -33,6 +26,7 @@ public class PlayerScaleController : ScaleController
     {
         base.Awake();
         Instance = this;
+        _animator = GetComponentInChildren<Animator>();
     }
 
     protected override void FixedUpdate()
@@ -72,41 +66,8 @@ public class PlayerScaleController : ScaleController
         }
     }
 
-    public void SetScale(float newScale, bool remainGrounded)
-    {
-        if (remainGrounded)
-        {
-            transform.position += transform.up * (newScale - Scale);
-        }
-
-        SetScale(newScale);
-    }
-
-    private void Start()
-    {
-        _animator = Locator.GetPlayerController().GetComponentInChildren<Animator>();
-    }
-
     private void Update()
     {
-        if (ModMain.Instance.UsingCustomPlayerScale && Keyboard.current[Key.Slash].isPressed)
-        {
-            if (_resetButtonHeldTime >= 5f)
-            {
-                ModMain.Instance.SetConfigSetting("UsingCustomPlayerScale", false);
-                _resetButtonHeldTime = 0f;
-                ModMain.Instance.Print("'Use Custom Player Scale' disabled");
-            }
-            else
-            {
-                _resetButtonHeldTime += Time.unscaledDeltaTime;
-            }
-        }
-        else
-        {
-            _resetButtonHeldTime = 0f;
-        }
-
         if (OWInput.IsInputMode(InputMode.Character) && ModMain.Instance.UsingCustomPlayerScale && ModMain.Instance.UsingScaleHotkeys)
         {
             if (Keyboard.current[Key.Comma].wasPressedThisFrame)
@@ -136,7 +97,7 @@ public class PlayerScaleController : ScaleController
 
     private void LateUpdate()
     {
-        AnimSpeed = 1f / (Instance.Scale * ModMain.Instance.PlayerWideness);
+        AnimSpeed = 1f / (Scale * ModMain.Instance.PlayerWideness);
         if (ModMain.Instance.HikersModAPI == null)
         {
             AnimSpeed = Mathf.Max(Mathf.Sqrt(Locator.GetPlayerController().GetRelativeGroundVelocity().magnitude * AnimSpeed / 6f), 1f);
@@ -466,13 +427,14 @@ public class PlayerScaleController : ScaleController
         {
             if (ModMain.Instance.UsingCustomPlayerScale)
             {
-                scaleController.SetScale(ModMain.Instance.CustomPlayerScale, true);
+                scaleController.SetScale(ModMain.Instance.CustomPlayerScale);
             }
             else
             {
-                scaleController.SetScale(StartingScale, true);
+                scaleController.SetScale(StartingScale);
             }
 
+            __instance.transform.position += __instance.transform.up * (scaleController.Scale - 1f);
             ModMain.Instance.HikersModAPI?.UpdateConfig();
         });
     }
