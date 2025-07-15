@@ -262,84 +262,85 @@ public class PlayerScaleController : ScaleController
     {
         if (Instance.Scale == 1f) return true;
 
-        Vector2 vector = OWInput.GetAxisValue(InputLibrary.moveXZ, InputMode.Character | InputMode.NomaiRemoteCam);
-        float magnitude = vector.magnitude;
+        Vector2 input = OWInput.GetAxisValue(InputLibrary.moveXZ, InputMode.Character | InputMode.NomaiRemoteCam);
+        float inputMagnitude = input.magnitude;
         if (__instance._groundBody != null)
         {
-            if (magnitude == 0f)
+            if (inputMagnitude == 0f)
             {
                 __instance.PreventSliding();
             }
-            Vector3 pointAcceleration = __instance._groundBody.GetPointAcceleration(__instance._groundContactPt);
+
+            Vector3 groundPointAcceleration = __instance._groundBody.GetPointAcceleration(__instance._groundContactPt);
             Vector3 forceAcceleration = __instance._forceDetector.GetForceAcceleration();
-            __instance._normalAcceleration = Vector3.Project(pointAcceleration - forceAcceleration, __instance._groundNormal);
+            __instance._normalAcceleration = Vector3.Project(groundPointAcceleration - forceAcceleration, __instance._groundNormal);
         }
-        bool flag = !OWInput.IsPressed(InputLibrary.rollMode, InputMode.Character | InputMode.NomaiRemoteCam, 0f) || __instance._heldLanternItem != null;
-        float num = flag ? ((vector.y < 0f) ? __instance._strafeSpeed : __instance._runSpeed) : __instance._walkSpeed;
-        float num2 = flag ? __instance._strafeSpeed : __instance._walkSpeed;
-        if (__instance._heldLanternItem != null)
+
+        bool isWalking = !OWInput.IsPressed(InputLibrary.rollMode, InputMode.Character | InputMode.NomaiRemoteCam, 0f) || __instance._heldLanternItem != null;
+        float maxSpeedY = isWalking ? ((input.y < 0f) ? __instance._strafeSpeed : __instance._runSpeed) : __instance._walkSpeed;
+        float maxSpeedX = isWalking ? __instance._strafeSpeed : __instance._walkSpeed;
+        __instance._heldLanternItem?.OverrideMaxRunSpeed(ref maxSpeedX, ref maxSpeedY);
+
+        if (Locator.GetAlarmSequenceController()?.IsAlarmWakingPlayer() ?? false)
         {
-            __instance._heldLanternItem.OverrideMaxRunSpeed(ref num2, ref num);
+            maxSpeedY = Mathf.Min(maxSpeedY, __instance._walkSpeed);
+            maxSpeedX = Mathf.Min(maxSpeedX, __instance._walkSpeed);
         }
-        if (Locator.GetAlarmSequenceController() != null && Locator.GetAlarmSequenceController().IsAlarmWakingPlayer())
-        {
-            num = Mathf.Min(num, __instance._walkSpeed);
-            num2 = Mathf.Min(num2, __instance._walkSpeed);
-        }
+
         if (__instance._jumpChargeTime > 0f && !__instance._useChargeCurve)
         {
-            float t = Mathf.InverseLerp(1f, 2f, __instance._jumpChargeTime);
-            num = Mathf.Min(num, Mathf.Lerp(num, 2f * Instance.Scale, t));
-            num2 = Mathf.Min(num2, Mathf.Lerp(num2, 2f * Instance.Scale, t));
+            float jumpChargeFraction = Mathf.InverseLerp(1f, 2f, __instance._jumpChargeTime);
+            maxSpeedY = Mathf.Min(maxSpeedY, Mathf.Lerp(maxSpeedY, 2f * Instance.Scale, jumpChargeFraction));
+            maxSpeedX = Mathf.Min(maxSpeedX, Mathf.Lerp(maxSpeedX, 2f * Instance.Scale, jumpChargeFraction));
         }
-        Vector3 a = new Vector3(vector.x * num2, 0f, vector.y * num);
+
+        Vector3 targetMovement = new Vector3(input.x * maxSpeedX, 0f, input.y * maxSpeedY);
         if (__instance._isStaggered)
         {
-            float num3 = Mathf.Clamp01((Time.time - __instance._initStaggerTime) / __instance._staggerLength);
-            a *= num3;
-            if (num3 == 1f)
+            float staggerCompletion = Mathf.Clamp01((Time.time - __instance._initStaggerTime) / __instance._staggerLength);
+            targetMovement *= staggerCompletion;
+            if (staggerCompletion == 1f)
             {
                 __instance._isStaggered = false;
             }
         }
+
         if (PlayerState.IsCameraUnderwater())
         {
-            a *= 0.5f;
+            targetMovement *= 0.5f;
         }
-        else if (!flag || a.magnitude <= __instance._walkSpeed)
+        else if (!isWalking || targetMovement.magnitude <= __instance._walkSpeed)
         {
-            RaycastHit raycastHit;
-            if (Physics.Raycast(__instance._transform.position + __instance._transform.TransformDirection(new Vector3(vector.x, 0f, vector.y).normalized * 0.1f * Instance.Scale), -__instance._transform.up, out raycastHit, 20f * Instance.Scale, OWLayerMask.groundMask)) //
+            if (Physics.Raycast(__instance._transform.position + __instance._transform.TransformDirection(new Vector3(input.x, 0f, input.y).normalized * 0.1f * Instance.Scale), -__instance._transform.up, out RaycastHit raycastHit, 20f * Instance.Scale, OWLayerMask.groundMask))
             {
                 float num4 = raycastHit.distance / Instance.Scale - 1f;
                 if (num4 > 0.2f && (Vector3.Angle(__instance._owRigidbody.GetLocalUpDirection(), raycastHit.normal) > (float)__instance._maxAngleToBeGrounded || num4 > 1.5f))
                 {
-                    a = Vector3.zero;
-                    vector = Vector2.zero;
+                    targetMovement = Vector3.zero;
                 }
             }
             else
             {
-                a = Vector3.zero;
-                vector = Vector2.zero;
+                targetMovement = Vector3.zero;
             }
         }
-        __instance.SetPhysicsMaterial((magnitude > 0.01f || __instance._movingPlatform != null) ? __instance._runningPhysicMaterial : __instance._standingPhysicMaterial);
-        Vector3 b = __instance._transform.InverseTransformDirection(__instance._owRigidbody.GetVelocity());
-        Vector3 vector2 = a + __instance.GetLocalGroundFrameVelocity() - b;
-        vector2.y = 0f;
-        if (vector2.magnitude > __instance._tumbleThreshold)
+
+        __instance.SetPhysicsMaterial((inputMagnitude > 0.01f || __instance._movingPlatform != null) ? __instance._runningPhysicMaterial : __instance._standingPhysicMaterial);
+        Vector3 velocity = __instance._transform.InverseTransformDirection(__instance._owRigidbody.GetVelocity());
+        Vector3 targetVelocity = targetMovement + __instance.GetLocalGroundFrameVelocity() - velocity;
+        targetVelocity.y = 0f;
+        if (targetVelocity.magnitude > __instance._tumbleThreshold)
         {
             __instance.InitTumble();
             return false;
         }
-        float num5 = Time.fixedDeltaTime * 60f;
-        float num6 = __instance._acceleration * num5;
-        vector2.x = Mathf.Clamp(vector2.x, -num6, num6);
-        vector2.z = Mathf.Clamp(vector2.z, -num6, num6);
-        Vector3 vector3 = __instance._transform.TransformDirection(vector2);
-        vector3 -= Vector3.Project(vector3, __instance._groundNormal);
-        __instance._owRigidbody.AddVelocityChange(vector3);
+
+        float maxVelocityChange = __instance._acceleration * Time.fixedDeltaTime * 60f;
+        targetVelocity.x = Mathf.Clamp(targetVelocity.x, -maxVelocityChange, maxVelocityChange);
+        targetVelocity.z = Mathf.Clamp(targetVelocity.z, -maxVelocityChange, maxVelocityChange);
+        Vector3 velocityChange = __instance._transform.TransformDirection(targetVelocity);
+        velocityChange -= Vector3.Project(velocityChange, __instance._groundNormal);
+        __instance._owRigidbody.AddVelocityChange(velocityChange);
 
         return false;
     }

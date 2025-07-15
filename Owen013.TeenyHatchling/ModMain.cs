@@ -125,7 +125,7 @@ public class ModMain : ModBehaviour
 
     private void Update()
     {
-        if (UsingCustomPlayerScale || UsingOtherCustomScales && Keyboard.current[Key.Slash].isPressed)
+        if ((UsingCustomPlayerScale || UsingOtherCustomScales) && Keyboard.current[Key.Slash].isPressed)
         {
             if (_resetButtonHeldTime >= 5f)
             {
@@ -151,7 +151,6 @@ public class ModMain : ModBehaviour
  *  ISSUES
  *  - Footstep particles stay huge when you shrink back down (may have fixed itself??? be on lookout) (nope...nevermind. rare)
  *  - flashlight distance doesn't scale
- *  - damage movement speed damping may not scale
  *  
  *  IDEAS
  *  - maybe i should reduce wind volume when big?
