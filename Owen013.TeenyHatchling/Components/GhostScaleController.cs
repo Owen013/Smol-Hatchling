@@ -11,7 +11,7 @@ public class GhostScaleController : ScaleController
 
     protected override void FixedUpdate()
     {
-        if (ModMain.Instance.UsingOtherCustomScales && TargetScale != ModMain.Instance.CustomInhabitantScale)
+        if (ModMain.Instance.IsUsingOtherCustomScales && TargetScale != ModMain.Instance.CustomInhabitantScale)
         {
             SetTargetScale(ModMain.Instance.CustomInhabitantScale);
         }
@@ -50,7 +50,7 @@ public class GhostScaleController : ScaleController
         // fire on the next update to avoid breaking things
         ModMain.Instance.ModHelper.Events.Unity.FireOnNextUpdate(() =>
         {
-            if (ModMain.Instance.UsingOtherCustomScales)
+            if (ModMain.Instance.IsUsingOtherCustomScales)
             {
                 scaleController.SetScale(ModMain.Instance.CustomInhabitantScale);
             }

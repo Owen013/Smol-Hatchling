@@ -46,7 +46,7 @@ public class SmolHatchlingAPI
     /// </summary>
     public bool UsingScaledPlayerAttributes()
     {
-        return ModMain.Instance.UsingScaledPlayerAttributes;
+        return ModMain.Instance.IsUsingScaledPlayerAttributes;
     }
 
     /// <summary>
@@ -158,56 +158,56 @@ public class SmolHatchlingAPI
     [Obsolete("GetTargetScale() is deprecated. Use GetPlayerScale() instead.")]
     public Vector3 GetTargetScale()
     {
-        ModMain.Instance.Print("GetTargetScale() is deprecated. Use GetPlayerScale() instead.", MessageType.Debug);
+        ModMain.Instance.ModHelper.Console.WriteLine("GetTargetScale() is deprecated. Use GetPlayerScale() instead.", MessageType.Debug);
         return Vector3.one * PlayerScaleController.Instance.TargetScale;
     }
 
     [Obsolete("GetCurrentScale() is deprecated. Use GetPlayerScale() instead.")]
     public Vector3 GetCurrentScale()
     {
-        ModMain.Instance.Print("GetCurrentScale() is deprecated. Use GetPlayerScale() instead.", MessageType.Debug);
+        ModMain.Instance.ModHelper.Console.WriteLine("GetCurrentScale() is deprecated. Use GetPlayerScale() instead.", MessageType.Debug);
         return Vector3.one * PlayerScaleController.Instance.Scale;
     }
 
     [Obsolete("GetAnimSpeed() is deprecated. Use GetPlayerAnimSpeed() instead.")]
     public float GetAnimSpeed()
     {
-        ModMain.Instance.Print("GetAnimSpeed() is deprecated. Use GetPlayerAnimSpeed() instead.", MessageType.Debug);
+        ModMain.Instance.ModHelper.Console.WriteLine("GetAnimSpeed() is deprecated. Use GetPlayerAnimSpeed() instead.", MessageType.Debug);
         return PlayerScaleController.Instance.AnimSpeed;
     }
 
     [Obsolete("UseScaledPlayerAttributes() is deprecated. Use IsScalingPlayerAttributes() instead.")]
     public bool UseScaledPlayerAttributes()
     {
-        ModMain.Instance.Print("UseScaledPlayerAttributes() is deprecated. Use IsScalingPlayerAttributes() instead.", MessageType.Debug);
-        return ModMain.Instance.UsingScaledPlayerAttributes;
+        ModMain.Instance.ModHelper.Console.WriteLine("UseScaledPlayerAttributes() is deprecated. Use IsScalingPlayerAttributes() instead.", MessageType.Debug);
+        return ModMain.Instance.IsUsingScaledPlayerAttributes;
     }
 
     [Obsolete("SetPlayerDefaultScale() is deprecated. Use SetPlayerStartingScale() instead.")]
     public void SetPlayerDefaultScale(float scale)
     {
-        ModMain.Instance.Print("SetPlayerDefaultScale() is deprecated. Use SetPlayerStartingScale() instead.", MessageType.Debug);
+        ModMain.Instance.ModHelper.Console.WriteLine("SetPlayerDefaultScale() is deprecated. Use SetPlayerStartingScale() instead.", MessageType.Debug);
         PlayerScaleController.StartingScale = scale;
     }
 
     [Obsolete("SetAnglerfishDefaultScale() is deprecated. Use SetAnglerfishStartingScale() instead.")]
     public void SetAnglerfishDefaultScale(float scale)
     {
-        ModMain.Instance.Print("SetAnglerfishDefaultScale() is deprecated. Use SetAnglerfishStartingScale() instead.", MessageType.Debug);
+        ModMain.Instance.ModHelper.Console.WriteLine("SetAnglerfishDefaultScale() is deprecated. Use SetAnglerfishStartingScale() instead.", MessageType.Debug);
         AnglerfishScaleController.StartingScale = scale;
     }
 
     [Obsolete("SetJellyfishDefaultScale() is deprecated. Use SetJellyfishStartingScale() instead.")]
     public void SetJellyfishDefaultScale(float scale)
     {
-        ModMain.Instance.Print("SetJellyfishDefaultScale() is deprecated. Use SetJellyfishStartingScale() instead.", MessageType.Debug);
+        ModMain.Instance.ModHelper.Console.WriteLine("SetJellyfishDefaultScale() is deprecated. Use SetJellyfishStartingScale() instead.", MessageType.Debug);
         JellyfishScaleController.StartingScale = scale;
     }
 
     [Obsolete("SetInhabitantDefaultScale() is deprecated. Use SetInhabitantStartingScale() instead.")]
     public void SetInhabitantDefaultScale(float scale)
     {
-        ModMain.Instance.Print("SetInhabitantDefaultScale() is deprecated. Use SetInhabitantStartingScale() instead.", MessageType.Debug);
+        ModMain.Instance.ModHelper.Console.WriteLine("SetInhabitantDefaultScale() is deprecated. Use SetInhabitantStartingScale() instead.", MessageType.Debug);
         GhostScaleController.StartingScale = scale;
     }
 }

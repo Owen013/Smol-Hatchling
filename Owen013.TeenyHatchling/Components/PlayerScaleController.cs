@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using OWML.Common;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,7 +30,7 @@ public class PlayerScaleController : ScaleController
 
     protected override void FixedUpdate()
     {
-        if (ModMain.Instance.UsingCustomPlayerScale && TargetScale != ModMain.Instance.CustomPlayerScale)
+        if (ModMain.Instance.IsUsingCustomPlayerScale && TargetScale != ModMain.Instance.CustomPlayerScale)
         {
             SetTargetScale(ModMain.Instance.CustomPlayerScale);
         }
@@ -41,7 +40,7 @@ public class PlayerScaleController : ScaleController
         if (ModMain.Instance.HikersModAPI == null)
         {
             PlayerCharacterController player = GetComponent<PlayerCharacterController>();
-            if (ModMain.Instance.UsingScaledPlayerAttributes)
+            if (ModMain.Instance.IsUsingScaledPlayerAttributes)
             {
                 player._runSpeed = 6f * Scale;
                 player._strafeSpeed = 4f * Scale;
@@ -68,7 +67,7 @@ public class PlayerScaleController : ScaleController
 
     private void Update()
     {
-        if (OWInput.IsInputMode(InputMode.Character) && ModMain.Instance.UsingCustomPlayerScale && ModMain.Instance.UsingScaleHotkeys)
+        if (OWInput.IsInputMode(InputMode.Character) && ModMain.Instance.IsUsingCustomPlayerScale && ModMain.Instance.IsUsingScaleHotkeys)
         {
             if (Keyboard.current[Key.Comma].wasPressedThisFrame)
             {
@@ -357,7 +356,7 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(JetpackThrusterModel), nameof(JetpackThrusterModel.FireTranslationalThrusters))]
     private static bool JetpackThrusterModel_FireTranslationalThrusters(JetpackThrusterModel __instance)
     {
-        if (!ModMain.Instance.UsingScaledPlayerAttributes || Instance.Scale == 1f) return true;
+        if (!ModMain.Instance.IsUsingScaledPlayerAttributes || Instance.Scale == 1f) return true;
 
         float thrustY = __instance._translationalInput.y * __instance._maxTranslationalThrust;
         if (__instance._boostActivated)
@@ -409,7 +408,7 @@ public class PlayerScaleController : ScaleController
     // this prefix is added manually if Hiker's Mod is not installed
     internal static bool DreamLanternItem_OverrideMaxRunSpeed(ref float maxSpeedX, ref float maxSpeedZ, DreamLanternItem __instance)
     {
-        if (!ModMain.Instance.UsingScaledPlayerAttributes || Instance.Scale == 1) return true;
+        if (!ModMain.Instance.IsUsingScaledPlayerAttributes || Instance.Scale == 1) return true;
 
         float lerpPosition = 1f - __instance._lanternController.GetFocus();
         lerpPosition *= lerpPosition;
@@ -426,7 +425,7 @@ public class PlayerScaleController : ScaleController
         // fire on the next update to avoid breaking things
         ModMain.Instance.ModHelper.Events.Unity.FireOnNextUpdate(() =>
         {
-            if (ModMain.Instance.UsingCustomPlayerScale)
+            if (ModMain.Instance.IsUsingCustomPlayerScale)
             {
                 scaleController.SetScale(ModMain.Instance.CustomPlayerScale);
             }
@@ -523,7 +522,7 @@ public class PlayerScaleController : ScaleController
     [HarmonyPatch(typeof(PlayerResources), nameof(PlayerResources.GetMaxImpactSpeed))]
     private static void GetImpactSpeed(ref float __result)
     {
-        if (ModMain.Instance.UsingScaledPlayerAttributes && Instance.Scale != 1f)
+        if (ModMain.Instance.IsUsingScaledPlayerAttributes && Instance.Scale != 1f)
         {
             __result *= Mathf.Max(Instance.Scale, Instance.TargetScale);
         }

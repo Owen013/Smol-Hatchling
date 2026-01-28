@@ -17,15 +17,15 @@ public class ModMain : ModBehaviour
 
     public bool IsImmersionInstalled { get; private set; }
 
-    public bool UsingCustomPlayerScale { get; private set; }
+    public bool IsUsingCustomPlayerScale { get; private set; }
 
     public float CustomPlayerScale { get; private set; }
 
-    public bool UsingScaleHotkeys { get; private set; }
+    public bool IsUsingScaleHotkeys { get; private set; }
 
-    public bool UsingScaledPlayerAttributes { get; private set; }
+    public bool IsUsingScaledPlayerAttributes { get; private set; }
 
-    public bool UsingOtherCustomScales { get; private set; }
+    public bool IsUsingOtherCustomScales { get; private set; }
 
     public float CustomAnglerfishScale { get; private set; }
 
@@ -50,11 +50,11 @@ public class ModMain : ModBehaviour
     {
         base.Configure(config);
 
-        UsingCustomPlayerScale = config.GetSettingsValue<bool>("UsingCustomPlayerScale");
+        IsUsingCustomPlayerScale = config.GetSettingsValue<bool>("UsingCustomPlayerScale");
         CustomPlayerScale = config.GetSettingsValue<float>("CustomPlayerScale");
-        UsingScaleHotkeys = config.GetSettingsValue<bool>("UsingScaleHotkeys");
-        UsingScaledPlayerAttributes = config.GetSettingsValue<bool>("UsingScaledPlayerAttributes");
-        UsingOtherCustomScales = config.GetSettingsValue<bool>("UsingOtherCustomScales");
+        IsUsingScaleHotkeys = config.GetSettingsValue<bool>("UsingScaleHotkeys");
+        IsUsingScaledPlayerAttributes = config.GetSettingsValue<bool>("UsingScaledPlayerAttributes");
+        IsUsingOtherCustomScales = config.GetSettingsValue<bool>("UsingOtherCustomScales");
         CustomAnglerfishScale = config.GetSettingsValue<float>("CustomAnglerfishScale");
         CustomJellyfishScale = config.GetSettingsValue<float>("CustomJellyfishScale");
         CustomInhabitantScale = config.GetSettingsValue<float>("CustomInhabitantScale");
@@ -62,35 +62,30 @@ public class ModMain : ModBehaviour
 
         if (CustomPlayerScale <= 0f)
         {
-            Print("Player Scale cannot be 0 or less.", MessageType.Error);
+            ModHelper.Console.WriteLine("Player Scale cannot be 0 or less.", MessageType.Error);
             SetConfigSetting("CustomPlayerScale", 1f);
         }
 
         if (CustomAnglerfishScale <= 0f)
         {
-            Print("Anglerfish Scale cannot be 0 or less.", MessageType.Error);
+            ModHelper.Console.WriteLine("Anglerfish Scale cannot be 0 or less.", MessageType.Error);
             SetConfigSetting("CustomAnglerfishScale", 1f);
         }
 
         if (CustomJellyfishScale <= 0f)
         {
-            Print("Jellyfish Scale cannot be 0 or less.", MessageType.Error);
+            ModHelper.Console.WriteLine("Jellyfish Scale cannot be 0 or less.", MessageType.Error);
             SetConfigSetting("CustomJellyfishScale", 1f);
         }
 
         if (CustomInhabitantScale <= 0f)
         {
-            Print("Inhabitant Scale cannot be 0 or less.", MessageType.Error);
+            ModHelper.Console.WriteLine("Inhabitant Scale cannot be 0 or less.", MessageType.Error);
             SetConfigSetting("CustomInhabitantScale", 1f);
         }
 
         OnConfigured?.Invoke();
         HikersModAPI?.UpdateConfig();
-    }
-
-    public void Print(string text, MessageType messageType = MessageType.Message)
-    {
-        ModHelper.Console.WriteLine(text, messageType);
     }
 
     public void Configure()
@@ -120,19 +115,19 @@ public class ModMain : ModBehaviour
             ModHelper.HarmonyHelper.AddPrefix<DreamLanternItem>(nameof(DreamLanternItem.OverrideMaxRunSpeed), typeof(PlayerScaleController), nameof(PlayerScaleController.DreamLanternItem_OverrideMaxRunSpeed));
         }
 
-        Print($"Smol Hatchling is ready to go!", MessageType.Success);
+        ModHelper.Console.WriteLine($"Smol Hatchling is ready to go!", MessageType.Success);
     }
 
     private void Update()
     {
-        if ((UsingCustomPlayerScale || UsingOtherCustomScales) && Keyboard.current[Key.Slash].isPressed)
+        if ((IsUsingCustomPlayerScale || IsUsingOtherCustomScales) && Keyboard.current[Key.Slash].isPressed)
         {
             if (_resetButtonHeldTime >= 5f)
             {
                 SetConfigSetting("UsingCustomPlayerScale", false);
                 SetConfigSetting("UsingOtherCustomScales", false);
                 _resetButtonHeldTime = 0f;
-                Print("Custom Scales disabled");
+                ModHelper.Console.WriteLine("Custom Scales disabled");
             }
             else
             {
